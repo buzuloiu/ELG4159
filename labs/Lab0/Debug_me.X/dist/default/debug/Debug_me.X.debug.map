@@ -1,0 +1,42 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Mon Jan 22 17:49:26 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000002
+                   .cinit    romdata   0x000001    program   0x000004
+                   .org_1       code   0x000005    program   0x00004c
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000002      
+                            0x000005    0x00002a      
+            41 out of 8454 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                      fin   0x00002a    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+               initialize   0x000005    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+                     main   0x000017    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+             next_address   0x00001e    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+transfer_ctr_value_to_bank3   0x000025    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+               initialize   0x000005    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+                     main   0x000017    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+             next_address   0x00001e    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+transfer_ctr_value_to_bank3   0x000025    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+                      fin   0x00002a    program     static ..\test_count_reg_wi_val_buggy_v1.asm
+
+

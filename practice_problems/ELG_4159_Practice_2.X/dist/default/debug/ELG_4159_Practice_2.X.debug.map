@@ -1,0 +1,38 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Thu Feb 01 16:11:53 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000002
+                   .cinit    romdata   0x000001    program   0x000004
+                   .org_1       code   0x000005    program   0x000018
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000002      
+                            0x000005    0x000010      
+            15 out of 8454 program addresses used, program memory utilization is 0%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     MAIN   0x00000b    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+                    START   0x000005    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+                TERMINATE   0x000010    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    START   0x000005    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+                     MAIN   0x00000b    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+                TERMINATE   0x000010    program     static C:\Users\Paul\Documents\Design_Projects\school-projects\ELG4159\Practice\ELG_4159_Practice_2.X\Practice_2.asm
+
+

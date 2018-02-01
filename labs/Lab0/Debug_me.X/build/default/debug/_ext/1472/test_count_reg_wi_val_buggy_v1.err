@@ -1,0 +1,2 @@
+Message[302] ..\TEST_COUNT_REG_WI_VAL_BUGGY_V1.ASM 46 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] ..\TEST_COUNT_REG_WI_VAL_BUGGY_V1.ASM 47 : Register in operand not in bank 0.  Ensure that bank bits are correct.
