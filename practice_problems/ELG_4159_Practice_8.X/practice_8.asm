@@ -22,7 +22,7 @@ START
     
 MAIN
     addwf INDF,0 ;add the 2 numbers
-    incf FSR
+    incf FSR,1
     decfsz 0x20
     goto MAIN
     

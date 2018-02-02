@@ -35,8 +35,7 @@ MAIN
     goto MATCH_FOUND
     
     incf FSR,1 ; point to the next address to be checked
-    
-      
+          
     decfsz 0x52 ;decrement the counter, stop iterating if it's 0
     goto MAIN
     
