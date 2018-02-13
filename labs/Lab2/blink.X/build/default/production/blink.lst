@@ -1,27 +1,12 @@
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  1
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00001 ;************************************************************************************
-                      00002 ;   Filename:      WaterLevelController.asm                                          
-                      00003 ;   Date:          January 25,2008                                          
-                      00004 ;   File Version:  1.00                                                                  
-                      00005 ;                                                                      
-                      00006 ;************************************************************************************
-                      00007 ;                                                                     
-                      00008 ;    Files required:                                                  
-                      00009 ;          WaterLevelController.inc                                                           
-                      00010 ;************************************************************************************
-                      00011 ;                                                                     
-                      00012 ;    Notes:                                                           
-                      00013 ;     This project shows the status of a Water Level Controller
-                      00014 ;                                                        
-                      00015 ;************************************************************************************
-                      00016         #include        <WaterLevelController.inc>                      ; this file includes variable de
-                            finitions and pin assignments   
-                      00001 #include <p16f917.inc>
+                      00001 ; ELG4159
+                      00002 ; Lab 2 (Problem 10 Tutorial 1)
+                      00003 #include <P16F917.inc>
                       00001         LIST
                       00002 
                       00003 ;==========================================================================
@@ -32,166 +17,80 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00008 ;==========================================================================
                       00009 
                       01253         LIST
-                      00002 
-2007   30E4           00003         __CONFIG    _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_
+                      00004 
+                      00005         
+2007   30E4           00006         __CONFIG    _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_
                             ON & _FCMEN_OFF & _IESO_OFF
-                      00004         errorlevel -302         ; supress "register not in bank0, check page bits" message
-                      00005 
-                      00006 ; Pin Declarations
-                      00007 
+                      00007         errorlevel -302         ; supress "register not in bank0, check page bits" message
                       00008 
-                      00009 ;--- Student Complete Section below
-                      00010         #define SW2 PORTA,0
-                      00011         #define SW3 PORTA,1
-                      00012 
-                      00013         #define SENSOR_LO PORTB,1
-                      00014         #define SENSOR_HI PORTB,2
-                      00015         #define PUMP_ON PORTB,3
-                      00016 
-                      00017 ;--- Student Complete Section above
-                      00018 ; Variable Declarations
-                      00019         cblock  0x20
-  00000020            00020                 Temp
-                      00021         endc
-                      00022 
-                      00023 
-                      00024 
-                      00025 
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  2
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00026 
-                      00027 
-                      00017 
-                      00018 ;************************************************************************************
-                      00019   org 0x00
-0000   2???           00020         goto    Initialize
-                      00021 
-                      00022   org 0x05
-                      00023 
-                      00024 ;************************************************************************************
-                      00025 ; Initialize - Initialize comparators, internal oscillator, I/O pins, 
-                      00026 ;       analog pins, variables  
-                      00027 ;
-                      00028 ;************************************************************************************
-0005                  00029 Initialize
-0005   1683           00030         bsf             STATUS,RP0              ; we'll set up the bank 1 Special Function Registers fir
-                            st
-                      00031 
-                      00032 ; Configure I/O pins for project        
-                      00033 
-                      00034 ;---- Student Complete Section below
-                      00035         
-0006   3003           00036         movlw           b'00000011'             ;bits 0 and 1 are inputs, the rest are outputs 
-0007   0085           00037         movwf           TRISA                   ;configure I/O  
-0008   0186           00038         clrf            TRISB
-                      00039 ;---- Student Complete Section above
-                      00040 
-                      00041 
-                      00042 ; Set internal oscillator frequency
-0009   3070           00043         movlw   b'01110000'             ; 8Mhz
-000A   008F           00044         movwf   OSCCON
-                      00045 ; Set TMR0 parameters
-000B   3086           00046         movlw   b'10000110'             ; PORTB pull-up disabled, TMR0 Prescaler 1:128
-000C   0081           00047         movwf   OPTION_REG              
-                      00048 ; Turn off comparators
-000D   3007           00049         movlw   0x07
-000E   009C           00050         movwf   CMCON0                  ; turn off comparators
-                      00051 ; Turn off Analog 
-000F   0191           00052         clrf    ANSEL
-                      00053 
-                      00054 
-                      00055 ;************************************************************************************
-                      00056 ; Note - When SW2 is pressed, the LED is toggled, and the debounce routine for SW2 is
-                      00057 ;        initiated.  Debouncing a switch is necessary to prevent one button press from 
-                      00058 ;        being read as more than one button press by the microcontroller.  A 
-                      00059 ;        microcontroller can read a button so fast that contact jitter in the switch 
-                      00060 ;        may be interpreted as more than one button press.
-                      00061 ;
-                      00062 ;************************************************************************************
-                      00063 
-                      00064                 
-                      00065 
-0010                  00066 Main
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  3
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00067 ;---- Student Complete Section below
-0010   1283           00068         bcf STATUS, RP0 ;bank 0 
-0011   0103           00069         clrw
-                      00070         
-0012   1C05           00071         btfss SW2  
-0013   3002           00072         movlw b'00000010'
-0014   0686           00073         xorwf PORTB,1
-0015   1C05           00074         btfss SW2  
-0016   2???           00075         goto DebounceStateSW2 ;check SW2, but debounce it
-                      00076         
-0017   0103           00077         clrw
-0018   1C85           00078         btfss SW3 
-0019   3004           00079         movlw b'00000100'
-001A   0686           00080         xorwf PORTB,1
-001B   1C85           00081         btfss SW3  
-001C   2???           00082         goto DebounceStateSW3 ;check SW3, but debounce it
-                      00083         
-                      00084         ;check if you are below the water amount
-001D   1906           00085         btfsc SENSOR_HI 
-001E   1186           00086         bcf PUMP_ON 
-                      00087         
-001F   1D06           00088         btfss SENSOR_HI
-0020   1586           00089         bsf PUMP_ON
-                      00090 
-                      00091 ;---- Student Complete Section above
+                      00009 ; variable declarations
+  0000007D            00010 TIMER_INIT EQU d'125'
+                      00011 
+Warning[205]: Found directive in column 1. (org)
+                      00012 org 0x00
 Warning[203]: Found opcode in column 1. (goto)
-0021   2???           00092 goto Main
-                      00093 
-                      00094 
-                      00095 
-0022                  00096 DebounceStateSW2                                ; Wait here until SW2 is released
-0022   1C05           00097         btfss   SW2
-0023   2???           00098         goto    DebounceStateSW2
-0024   0181           00099         clrf    TMR0                    ; Once released clear TMR0 and the TMR0 interrupt flag
-0025   110B           00100         bcf             INTCON,T0IF             ;  in preparation to time 16ms
-                      00101 
-0026                  00102 DebounceState2SW2                               ; State2 makes sure than SW2 is unpressed for 16ms befor
-                            e
-0026   1C05           00103         btfss   SW2                                     ;  returning to look for the next time SW2 is pr
-                            essed
-0027   2???           00104         goto    DebounceStateSW2        ; If SW2 is pressed again in this state then return to State1
-0028   1D0B           00105         btfss   INTCON,T0IF             ; Else, continue to count down 16ms
-0029   2???           00106         goto    DebounceState2SW2       ; Time = TMR0_max * TMR0 prescaler * (1/(Fosc/4)) = 256*128*0.5E
-                            -6 = 16.4ms
-002A   0008           00107         return
-                      00108 
-002B                  00109 DebounceStateSW3                                ; Wait here until SW2 is released
-002B   1C85           00110         btfss   SW3
-002C   2???           00111         goto    DebounceStateSW3
-002D   0181           00112         clrf    TMR0                    ; Once released clear TMR0 and the TMR0 interrupt flag
-002E   110B           00113         bcf             INTCON,T0IF             ;  in preparation to time 16ms
-                      00114 
-002F                  00115 DebounceState2SW3                                       ; State2 makes sure than SW2 is unpressed for 16
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  4
+0000   2???           00013 goto initialize
+Warning[205]: Found directive in column 1. (org)
+                      00014 org 0x05
+                      00015  
+0005                  00016 initialize
+                      00017 
+                      00018         ; set clock to 125KHz
+0005   1303           00019         BCF STATUS,RP1
+0006   1683           00020         BSF STATUS,RP0 ;bank1
+0007   1005           00021         BCF TRISA,0
+                      00022 
+0008   0191           00023         CLRF ANSEL
+                      00024 
+0009   3010           00025         MOVLW b'00010000'
+000A   008F           00026         MOVWF OSCCON
+                      00027 
+000B   3084           00028         MOVLW b'10000100'
+000C   0081           00029         MOVWF OPTION_REG
+                      00030 
+                      00031         ; configure RA0 as output
+                      00032         ; disable comparators
+000D   3007           00033         MOVLW 0x07
+000E   009C           00034         MOVWF CMCON0
+                      00035         ; return to Bank 0
+000F   1283           00036         BCF STATUS,RP0
+0010   168B           00037         BSF INTCON,T0IE
+                      00038 
+0011   2???           00039         GOTO main
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                            ms before
-002F   1C85           00116         btfss   SW3                                     ;  returning to look for the next time SW2 is pr
-                            essed
-0030   2???           00117         goto    DebounceStateSW3        ; If SW2 is pressed again in this state then return to State1
-0031   1D0B           00118         btfss   INTCON,T0IF             ; Else, continue to count down 16ms
-0032   2???           00119         goto    DebounceState2SW3               ; Time = TMR0_max * TMR0 prescaler * (1/(Fosc/4)) = 256*
-                            128*0.5E-6 = 16.4ms
-0033   0008           00120         return  
-                      00121 
-30E4                  00122         END                                             ; directive 'end of program'
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  5
+                      00040 
+0012                  00041 main
+0012   110B           00042         BCF INTCON,T0IF
+0013   307D           00043         MOVLW b'01111101'
+                      00044         
+0014   0081           00045         MOVWF TMR0
+                      00046         
+0015   2???           00047         call waitm
+0016   2???           00048         call toggle
+0017   2???           00049         goto main
+                      00050   
+0018                  00051 waitm
+0018   1D0B           00052         BTFSS INTCON,T0IF
+0019   2???           00053         goto waitm
+001A   0008           00054         return
+                      00055 
+001B                  00056 toggle  
+001B   3001           00057         MOVLW b'00000001'
+001C   0685           00058         XORWF PORTA,1
+001D   0008           00059         return
+                      00060         
+                      00061 
+                      00062         
+                      00063 
+                      00064   
+Warning[205]: Found directive in column 1. (END)
+30E4                  00065 END
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  3
 
 
 SYMBOL TABLE
@@ -250,7 +149,7 @@ CCP1X                             00000005
 CCP1Y                             00000004
 CCP2CON                           0000001D
 CCP2IE                            00000000
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  6
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  4
 
 
 SYMBOL TABLE
@@ -289,10 +188,6 @@ DATA_ADDRESS                      00000005
 DC                                00000001
 D_A                               00000005
 D_NOT_A                           00000005
-DebounceState2SW2                 00000026
-DebounceState2SW3                 0000002F
-DebounceStateSW2                  00000022
-DebounceStateSW3                  0000002B
 EEADR                             0000010D
 EEADRH                            0000010F
 EEADRH0                           00000000
@@ -309,16 +204,16 @@ EEADRL4                           00000004
 EEADRL5                           00000005
 EEADRL6                           00000006
 EEADRL7                           00000007
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  7
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  5
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-EECON1                            0000018C
-EECON2                            0000018D
-EEDATA                            0000010C
-EEDATH                            0000010E
 EEDATH0                           00000000
 EEDATH1                           00000001
 EEDATH2                           00000002
@@ -368,17 +263,16 @@ IOCB6                             00000006
 IOCB7                             00000007
 IRCF0                             00000004
 IRCF1                             00000005
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  8
+IRCF2                             00000006
+IRP                               00000007
+IRVST                             00000005
+LCDA                              00000005
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  6
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-IRCF2                             00000006
-IRP                               00000007
-IRVST                             00000005
-Initialize                        00000005
-LCDA                              00000005
 LCDCON                            00000107
 LCDDATA0                          00000110
 LCDDATA1                          00000111
@@ -413,7 +307,6 @@ LVDIF                             00000002
 LVDL0                             00000000
 LVDL1                             00000001
 LVDL2                             00000002
-Main                              00000010
 NOT_A                             00000005
 NOT_ADDRESS                       00000005
 NOT_BO                            00000000
@@ -427,18 +320,18 @@ NOT_T1SYNC                        00000002
 NOT_TO                            00000004
 NOT_TX8                           00000006
 NOT_W                             00000002
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE  9
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 NOT_WRITE                         00000002
 OERR                              00000001
 OPTION_REG                        00000081
 OSCCON                            0000008F
 OSCTUNE                           00000090
 OSFIE                             00000007
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 OSFIF                             00000007
 OSTS                              00000003
 P                                 00000004
@@ -460,7 +353,6 @@ PS0                               00000000
 PS1                               00000001
 PS2                               00000002
 PSA                               00000003
-PUMP_ON                           PORTB,3
 R                                 00000002
 RA0                               00000000
 RA1                               00000001
@@ -486,12 +378,6 @@ RC2                               00000002
 RC3                               00000003
 RC4                               00000004
 RC5                               00000005
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 10
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 RC6                               00000006
 RC7                               00000007
 RC8_9                             00000006
@@ -499,6 +385,12 @@ RC9                               00000006
 RCD8                              00000000
 RCIE                              00000005
 RCIF                              00000005
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 RCREG                             0000001A
 RCSTA                             00000018
 RD                                00000000
@@ -545,12 +437,6 @@ S13C3                             00000005
 S14C0                             00000006
 S14C1                             00000006
 S14C2                             00000006
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 11
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 S14C3                             00000006
 S15C0                             00000007
 S15C1                             00000007
@@ -558,6 +444,12 @@ S15C2                             00000007
 S15C3                             00000007
 S16C0                             00000000
 S16C1                             00000000
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 S16C2                             00000000
 S16C3                             00000000
 S17C0                             00000001
@@ -604,12 +496,6 @@ S4C0                              00000004
 S4C1                              00000004
 S4C2                              00000004
 S4C3                              00000004
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 12
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 S5C0                              00000005
 S5C1                              00000005
 S5C2                              00000005
@@ -617,6 +503,12 @@ S5C3                              00000005
 S6C0                              00000006
 S6C1                              00000006
 S6C2                              00000006
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 S6C3                              00000006
 S7C0                              00000007
 S7C1                              00000007
@@ -663,12 +555,6 @@ SEG0COM2                          00000000
 SEG0COM3                          00000000
 SEG1                              00000001
 SEG10                             00000002
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 13
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 SEG10COM0                         00000002
 SEG10COM1                         00000002
 SEG10COM2                         00000002
@@ -676,6 +562,12 @@ SEG10COM3                         00000002
 SEG11                             00000003
 SEG11COM0                         00000003
 SEG11COM1                         00000003
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 SEG11COM2                         00000003
 SEG11COM3                         00000003
 SEG12                             00000004
@@ -722,12 +614,6 @@ SEG1COM0                          00000001
 SEG1COM1                          00000001
 SEG1COM2                          00000001
 SEG1COM3                          00000001
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 14
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 SEG2                              00000002
 SEG20                             00000004
 SEG20COM0                         00000004
@@ -735,6 +621,12 @@ SEG20COM1                         00000004
 SEG20COM2                         00000004
 SEG20COM3                         00000004
 SEG21                             00000005
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 SEG21COM0                         00000005
 SEG21COM1                         00000005
 SEG21COM2                         00000005
@@ -781,12 +673,6 @@ SEG7COM3                          00000007
 SEG8                              00000000
 SEG8COM0                          00000000
 SEG8COM1                          00000000
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 15
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 SEG8COM2                          00000000
 SEG8COM3                          00000000
 SEG9                              00000001
@@ -794,6 +680,12 @@ SEG9COM0                          00000001
 SEG9COM1                          00000001
 SEG9COM2                          00000001
 SEG9COM3                          00000001
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 SEGEN0                            00000000
 SEGEN1                            00000001
 SEGEN10                           00000002
@@ -818,8 +710,6 @@ SEGEN6                            00000006
 SEGEN7                            00000007
 SEGEN8                            00000000
 SEGEN9                            00000001
-SENSOR_HI                         PORTB,2
-SENSOR_LO                         PORTB,1
 SLPEN                             00000006
 SMP                               00000007
 SPBRG                             00000099
@@ -838,14 +728,6 @@ SSPM3                             00000003
 SSPOV                             00000006
 SSPSTAT                           00000094
 STATUS                            00000003
-SW2                               PORTA,0
-SW3                               PORTA,1
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 16
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 SWDTE                             00000000
 SWDTEN                            00000000
 SYNC                              00000004
@@ -857,6 +739,12 @@ T1CKPS0                           00000004
 T1CKPS1                           00000005
 T1CON                             00000010
 T1GE                              00000006
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 T1GINV                            00000007
 T1GSS                             00000001
 T1INSYNC                          00000002
@@ -865,6 +753,7 @@ T1SYNC                            00000002
 T2CKPS0                           00000000
 T2CKPS1                           00000001
 T2CON                             00000012
+TIMER_INIT                        0000007D
 TMR0                              00000001
 TMR0IE                            00000005
 TMR0IF                            00000002
@@ -899,12 +788,6 @@ TRISB1                            00000001
 TRISB2                            00000002
 TRISB3                            00000003
 TRISB4                            00000004
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 17
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 TRISB5                            00000005
 TRISB6                            00000006
 TRISB7                            00000007
@@ -915,6 +798,12 @@ TRISC2                            00000002
 TRISC3                            00000003
 TRISC4                            00000004
 TRISC5                            00000005
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 TRISC6                            00000006
 TRISC7                            00000007
 TRISD                             00000088
@@ -946,7 +835,6 @@ TXIE                              00000004
 TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
-Temp                              00000020
 UA                                00000001
 VCFG0                             00000005
 VCFG1                             00000006
@@ -958,12 +846,6 @@ VR3                               00000003
 VRCON                             0000009D
 VREN                              00000007
 VRR                               00000005
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 18
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 W                                 00000000
 WA                                00000004
 WCOL                              00000007
@@ -975,6 +857,12 @@ WDTPS3                            00000004
 WERR                              00000005
 WFT                               00000007
 WPU                               00000095
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 WPU0                              00000000
 WPU1                              00000001
 WPU2                              00000002
@@ -1017,12 +905,6 @@ _EXTRC                            00003FFF
 _EXTRCIO                          00003FFE
 _EXTRC_OSC_CLKOUT                 00003FFF
 _EXTRC_OSC_NOCLKOUT               00003FFE
-MPASM 5.76          WATERLEVELCONTROLLER.ASM   2-12-2018  18:38:50         PAGE 19
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 _FCMEN_OFF                        000037FF
 _FCMEN_ON                         00003FFF
 _FOSC_EC                          00003FFB
@@ -1034,6 +916,12 @@ _FOSC_INTOSCIO                    00003FFC
 _FOSC_LP                          00003FF8
 _FOSC_XT                          00003FF9
 _HS_OSC                           00003FFA
+MPASM 5.76                         BLINK.ASM   2-12-2018  20:20:47         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 _IDLOC0                           00002000
 _IDLOC1                           00002001
 _IDLOC2                           00002002
@@ -1055,9 +943,13 @@ _WDT_OFF                          00003FF7
 _WDT_ON                           00003FFF
 _XT_OSC                           00003FF9
 __16F917                          00000001
+initialize                        00000005
+main                              00000012
+toggle                            0000001B
+waitm                             00000018
 
 Errors   :     0
-Warnings :     1 reported,     0 suppressed
-Messages :     0 reported,     6 suppressed
+Warnings :     4 reported,     0 suppressed
+Messages :     0 reported,     5 suppressed
 
 

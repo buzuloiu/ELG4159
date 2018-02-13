@@ -1,12 +1,13 @@
 MPLINK 5.08, LINKER
-Linker Map File - Created Mon Feb 12 15:04:11 2018
+Linker Map File - Created Mon Feb 12 20:20:49 2018
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
                    .org_0       code   0x000000    program   0x000002
                    .cinit    romdata   0x000001    program   0x000004
-                   .org_1       code   0x000005    program   0x000034
+                   .org_1       code   0x000005    program   0x000032
+.config_2007_BUILD/DEFAULT/PRODUCTION/BLINK.O       code   0x002007    program   0x000002
 
 
 
@@ -14,7 +15,8 @@ Linker Map File - Created Mon Feb 12 15:04:11 2018
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000002      
-                            0x000005    0x00001e      
+                            0x000005    0x00001d      
+                            0x002007    0x002007      
             29 out of 8454 program addresses used, program memory utilization is 0%
 
 
@@ -22,21 +24,19 @@ Linker Map File - Created Mon Feb 12 15:04:11 2018
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-               initialize   0x000005    program     static ..\square_signal_generator.asm
-                     main   0x000014    program     static ..\square_signal_generator.asm
-                terminate   0x000018    program     static ..\square_signal_generator.asm
-                   toggle   0x00001c    program     static ..\square_signal_generator.asm
-                     wait   0x000019    program     static ..\square_signal_generator.asm
+               initialize   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                     main   0x000012    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                   toggle   0x00001b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                    waitm   0x000018    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
 
 
 
                               Symbols - Sorted by Address
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-               initialize   0x000005    program     static ..\square_signal_generator.asm
-                     main   0x000014    program     static ..\square_signal_generator.asm
-                terminate   0x000018    program     static ..\square_signal_generator.asm
-                     wait   0x000019    program     static ..\square_signal_generator.asm
-                   toggle   0x00001c    program     static ..\square_signal_generator.asm
+               initialize   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                     main   0x000012    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                    waitm   0x000018    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
+                   toggle   0x00001b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab2\blink.X\blink.asm
 
 

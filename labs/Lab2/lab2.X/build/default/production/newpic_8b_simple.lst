@@ -1,4 +1,4 @@
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  1
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -6,8 +6,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 
                       00001 ; ELG4159
                       00002 ; Lab 2 (Problem 10 Tutorial 1)
-                      00003 
-                      00004 #include <p16f917.inc>
+                      00003 #include <p16f917.inc>
                       00001         LIST
                       00002 
                       00003 ;==========================================================================
@@ -18,83 +17,76 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00008 ;==========================================================================
                       00009 
                       01253         LIST
-                      00005 
-                      00006 ; variable declarations
+                      00004 
+                      00005 ; variable declarations
+  0000007D            00006 TIMER_INIT EQU d'125'
                       00007 
-  0000007D            00008 TIMER_INIT EQU d'125'
-                      00009 
-                      00010  
-                      00011  org 0x00
-0000   2???           00012  goto initialize
-                      00013  org 0x05
-                      00014  
-0005                  00015 initialize
-                      00016     ; select internal clock for timer0
+                      00008     org 0x00
+0000   2???           00009     goto initialize
+                      00010     org 0x05
+                      00011  
+0005                  00012 initialize
+                      00013 
+                      00014     ; set clock to 125KHz
+0005   1683           00015     BSF STATUS,RP0 ;bank1
+0006   1303           00016     BCF STATUS,RP1
+                      00017     
+                      00018     
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0005   1281           00017       BCF OPTION_REG,5
-                      00018     ; select pre-scaler for timer0 to 32
+0007   0191           00019     CLRF ANSEL
+                      00020       
+0008   3004           00021     MOVLW b'00000100'
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0006   1201           00019       BCF OPTION_REG,4
-                      00020     ; configure pre-scaler 2^32
+0009   0081           00022     MOVWF OPTION_REG
+                      00023 
+000A   3010           00024     MOVLW b'00010000'
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0007   1401           00021       BSF OPTION_REG,0
+000B   008F           00025     MOVWF OSCCON
+                      00026     ; configure RA0 as output
+                      00027   
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0008   1081           00022       BCF OPTION_REG,1
+000C   1005           00028     BCF TRISA,0
+                      00029     ; disable comparators
+000D   3007           00030     MOVLW 0x07
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0009   1501           00023       BSF OPTION_REG,2
-                      00024 
-                      00025 
-                      00026     ; set clock to 125KHz
-000A   1403           00027       BSF STATUS,0
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000B   160F           00028       BSF OSCCON,4
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000C   128F           00029       BCF OSCCON,5
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000D   130F           00030       BCF OSCCON,6
-                      00031     ; configure RA0 as output
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000E   1005           00032       BCF TRISA,0
-                      00033     ; disable comparators
-000F   3007           00034       MOVLW 0x07
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  2
+000E   009C           00031     MOVWF CMCON0
+                      00032     ; return to Bank 0
+000F   1283           00033     BCF STATUS,RP0
+0010   1303           00034     BCF STATUS,RP1
+                      00035 
+0011   168B           00036     BSF INTCON,T0IE
+0012   2???           00037     GOTO main
+                      00038 
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0010   009C           00035       MOVWF CMCON0
-                      00036     ; return to Bank 0
-0011   1003           00037       BCF STATUS,0
-0012   168B           00038       BSF INTCON, 5
-0013   2???           00039       GOTO main
-                      00040 
-0014                  00041 main
-0014   110B           00042     BCF INTCON,T0IF
-0015   307D           00043     MOVLW TIMER_INIT
-0016   0081           00044     MOVWF TMR0
-0017   2???           00045     GOTO wait
-                      00046   
-0018                  00047 terminate
-0018   2???           00048      GOTO terminate
-                      00049 
-                      00050   
-0019                  00051 wait
-0019   1D0B           00052     BTFSS INTCON,T0IF
-001A   2???           00053     GOTO wait
-001B   2???           00054     GOTO toggle
-                      00055 
-                      00056 
-001C                  00057 toggle  
-001C   3001           00058     MOVLW b'00000001'
-001D   0685           00059     XORWF PORTA,1
-001E   2???           00060     GOTO main
-                      00061 
-                      00062   
+0013                  00039 main
+0013   110B           00040     BCF INTCON,T0IF
+0014   307D           00041     MOVLW TIMER_INIT
+0015   0081           00042     MOVWF TMR0
+0016   2???           00043     GOTO wait_m
+                      00044   
+0017                  00045 terminate
+0017   2???           00046     GOTO terminate
+                      00047 
+                      00048   
+0018                  00049 wait_m
+0018   1D0B           00050     BTFSS INTCON,T0IF
+0019   2???           00051     GOTO wait_m
+001A   2???           00052     GOTO toggle
+                      00053 
+001B                  00054 toggle  
+001B   3001           00055     MOVLW b'00000001'
+001C   0685           00056     XORWF PORTA,1
+001D   2???           00057     GOTO main
+                      00058 
+                      00059   
 Warning[205]: Found directive in column 1. (END)
-                      00063 END
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  3
+                      00060 END
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  3
 
 
 SYMBOL TABLE
@@ -153,7 +145,7 @@ CCP1X                             00000005
 CCP1Y                             00000004
 CCP2CON                           0000001D
 CCP2IE                            00000000
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  4
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  4
 
 
 SYMBOL TABLE
@@ -212,7 +204,7 @@ EECON1                            0000018C
 EECON2                            0000018D
 EEDATA                            0000010C
 EEDATH                            0000010E
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  5
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  5
 
 
 SYMBOL TABLE
@@ -271,7 +263,7 @@ IRCF2                             00000006
 IRP                               00000007
 IRVST                             00000005
 LCDA                              00000005
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  6
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  6
 
 
 SYMBOL TABLE
@@ -330,7 +322,7 @@ OPTION_REG                        00000081
 OSCCON                            0000008F
 OSCTUNE                           00000090
 OSFIE                             00000007
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  7
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  7
 
 
 SYMBOL TABLE
@@ -389,7 +381,7 @@ RC9                               00000006
 RCD8                              00000000
 RCIE                              00000005
 RCIF                              00000005
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  8
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  8
 
 
 SYMBOL TABLE
@@ -448,7 +440,7 @@ S15C2                             00000007
 S15C3                             00000007
 S16C0                             00000000
 S16C1                             00000000
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE  9
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE  9
 
 
 SYMBOL TABLE
@@ -507,7 +499,7 @@ S5C3                              00000005
 S6C0                              00000006
 S6C1                              00000006
 S6C2                              00000006
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 10
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 10
 
 
 SYMBOL TABLE
@@ -566,7 +558,7 @@ SEG10COM3                         00000002
 SEG11                             00000003
 SEG11COM0                         00000003
 SEG11COM1                         00000003
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 11
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 11
 
 
 SYMBOL TABLE
@@ -625,7 +617,7 @@ SEG20COM1                         00000004
 SEG20COM2                         00000004
 SEG20COM3                         00000004
 SEG21                             00000005
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 12
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 12
 
 
 SYMBOL TABLE
@@ -684,7 +676,7 @@ SEG9COM0                          00000001
 SEG9COM1                          00000001
 SEG9COM2                          00000001
 SEG9COM3                          00000001
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 13
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 13
 
 
 SYMBOL TABLE
@@ -743,7 +735,7 @@ T1CKPS0                           00000004
 T1CKPS1                           00000005
 T1CON                             00000010
 T1GE                              00000006
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 14
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 14
 
 
 SYMBOL TABLE
@@ -802,7 +794,7 @@ TRISC2                            00000002
 TRISC3                            00000003
 TRISC4                            00000004
 TRISC5                            00000005
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 15
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 15
 
 
 SYMBOL TABLE
@@ -861,7 +853,7 @@ WDTPS3                            00000004
 WERR                              00000005
 WFT                               00000007
 WPU                               00000095
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 16
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 16
 
 
 SYMBOL TABLE
@@ -920,7 +912,7 @@ _FOSC_INTOSCIO                    00003FFC
 _FOSC_LP                          00003FF8
 _FOSC_XT                          00003FF9
 _HS_OSC                           00003FFA
-MPASM 5.76       SQUARE_SIGNAL_GENERATOR.ASM   2-12-2018  15:04:09         PAGE 17
+MPASM 5.76              NEWPIC_8B_SIMPLE.ASM   2-12-2018  19:01:56         PAGE 17
 
 
 SYMBOL TABLE
@@ -948,13 +940,13 @@ _WDT_ON                           00003FFF
 _XT_OSC                           00003FF9
 __16F917                          00000001
 initialize                        00000005
-main                              00000014
-terminate                         00000018
-toggle                            0000001C
-wait                              00000019
+main                              00000013
+terminate                         00000017
+toggle                            0000001B
+wait_m                            00000018
 
 Errors   :     0
 Warnings :     1 reported,     0 suppressed
-Messages :    10 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
 
 
