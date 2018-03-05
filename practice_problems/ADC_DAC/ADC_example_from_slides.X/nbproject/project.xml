@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>Slides_example</name>
-            <creation-uuid>9d5ea755-75ce-4c0e-8fcd-2e425ad1f3dc</creation-uuid>
+            <name>ADC_example_from_slides</name>
+            <creation-uuid>0350d2c3-b352-4541-ba5e-e6698b3e2422</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions/>
             <cpp-extensions/>

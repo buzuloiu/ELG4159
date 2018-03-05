@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Slides_example.X
+PROJECTNAME=DAC_example_from_slides.X
 
 # Active Configuration
 DEFAULTCONF=default
