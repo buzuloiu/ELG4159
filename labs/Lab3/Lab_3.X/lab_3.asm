@@ -45,10 +45,12 @@ TERMINATE
 
 PROCESS_DATA
     NOP ;this is where the bits would be read from ADRESH and ADRESL
+    ;for the purpose of this prelab, I don't think anything further needs to be done here
     return
     
 SampleTime
     NOP ;this is where there would be a delay of time before they start converting
+    ;someone should implement this, including the initialization of timer0 at the beginning
     return 
     
 END
