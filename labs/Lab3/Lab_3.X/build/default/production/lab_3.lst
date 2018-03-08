@@ -1,17 +1,26 @@
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  1
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Warning[205]: Found directive in column 1. (__CONFIG)
-2007   30E4           00001 __CONFIG _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_ON & _FCMEN
-                            _OFF & _IESO_OFF
+                      00001 ;Group 16
+                      00002 ;Paul Buzuloiu
+                      00003 ;Manit Ginoya
+                      00004 ;Nikhil Peri  
+                      00005 
+                      00006 ;we use pin RA0 because 16 mod 8 is 0    
+                      00007     
+                      00008 ;Write an assembly program to continuously sample an analog 
+                      00009 ;input signal into a 10-bit binary value. 
+                      00010     
+2007   30E4           00011     __CONFIG _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_ON & _F
+                            CMEN_OFF & _IESO_OFF
 Warning[205]: Found directive in column 1. (errorlevel)
-                      00002 errorlevel -302 ; supress "register not in bank0, check page bits" message
-                      00003     
-                      00004     
-                      00005 #include <p16f917.inc>
+                      00012 errorlevel -302 ; supress "register not in bank0, check page bits" message
+                      00013     
+                      00014     
+                      00015 #include <p16f917.inc>  
                       00001         LIST
                       00002 
                       00003 ;==========================================================================
@@ -22,63 +31,74 @@ Warning[205]: Found directive in column 1. (errorlevel)
                       00008 ;==========================================================================
                       00009 
                       01253         LIST
-                      00006 
-                      00007     ;group 16
-                      00008     ;A is 0
-                      00009     ;B is 1
-                      00010     ;T is 1 second
-                      00011     
-                      00012     ;Write an assembly program to continuously sample an analog 
-                      00013     ;input signal into a 10-bit binary value. 
-                      00014 
-                      00015     
                       00016     
                       00017     org 0x00
 0000   2???           00018     goto START
                       00019     org 0x05
                       00020 
 0005                  00021 START
-0005   1683 1303      00022     BANKSEL ADCON1 ;
-0007   3070           00023     MOVLW b'01110000' ;ADC Frc clock
-0008   009F           00024     MOVWF ADCON1 ;
-0009   1683 1303      00025     BANKSEL TRISA ;
-000B   1405           00026     BSF TRISA,0 ;Set RA0 to input
-000C   1683 1303      00027     BANKSEL ANSEL ;
-000E   1411           00028     BSF ANSEL,0 ;Set RA0 to analog
-000F   1283 1303      00029     BANKSEL ADCON0 ;
-0011   3081           00030     MOVLW b'10000001' ;Right justify,
-0012   009F           00031     MOVWF ADCON0 ;Vdd Vref, AN0, On
-0013   2???           00032     CALL SampleTime ;Acquisiton delay
-                      00033     
-                      00034     
-0014                  00035 LOOP
-0014   189F           00036     BTFSC ADCON0,GO ;Is conversion done?
-0015   2???           00037     GOTO LOOP;No, test again
-0016   2???           00038     call PROCESS_DATA
-0017   149F           00039     BSF ADCON0,GO ;Start conversion again
-0018   2???           00040     GOTO LOOP
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  2
+0005   1683 1303      00022     BANKSEL ADCON1 
+0007   3050           00023     MOVLW b'01010000' ;set ADC Prescaler to 16
+0008   009F           00024     MOVWF ADCON1 
+                      00025     
+0009   1683 1303      00026     BANKSEL TRISA 
+000B   1405           00027     BSF TRISA,0 ;Set RA0 to input
+                      00028     
+000C   1683 1303      00029     BANKSEL ANSEL 
+000E   1411           00030     BSF ANSEL,0 ;Set RA0 to analog
+                      00031        
+000F   1683 1303      00032     BANKSEL  OSCCON
+0011   3070           00033     MOVLW b'01110000' ;Set F_osc to 8MHz
+0012   008F           00034     MOVWF OSCCON
+                      00035     
+0013   1683 1303      00036     BANKSEL OPTION_REG
+0015   3081           00037     MOVLW b'10000001' ;set timer0 prescaler to 4
+0016   0081           00038     MOVWF OPTION_REG
+                      00039         
+0017   1283 1303      00040     BANKSEL ADCON0 
+0019   3081           00041     MOVLW b'10000001' ;Right justify, enable ADC
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00041 
-                      00042     
-0019                  00043 TERMINATE
-0019   2???           00044     goto TERMINATE
-                      00045 
-001A                  00046 PROCESS_DATA
-001A   0000           00047     NOP ;this is where the bits would be read from ADRESH and ADRESL
-001B   0008           00048     return
-                      00049     
-001C                  00050 SampleTime
-001C   0000           00051     NOP ;this is where there would be a delay of time before they start converting
-001D   0008           00052     return 
-                      00053     
+001A   009F           00042     MOVWF ADCON0 
+001B   2???           00043     CALL SampleTime ; Wait for Acquisiton delay
+                      00044        
+001C                  00045 LOOP
+001C   189F           00046     BTFSC ADCON0,GO ; Wait until conversion finishes
+001D   2???           00047     GOTO LOOP
+001E   2???           00048     call PROCESS_DATA
+001F   149F           00049     BSF ADCON0,GO ;Start conversion again
+0020   2???           00050     GOTO LOOP
+                      00051    
+0021                  00052 TERMINATE
+0021   2???           00053     goto TERMINATE
+                      00054 
+0022                  00055 PROCESS_DATA
+0022   0000           00056     NOP 
+                      00057     ;this is where the bits would be read from ADRESH and ADRESL
+                      00058     ;for the purpose of this prelab, I don't think anything further needs to be done here
+                      00059     ;the analog signal has been converted to 10 bit digital, stored in ADRESH and ADRSEL
+0023   0008           00060     return
+                      00061     
+0024                  00062 SampleTime ;acquisition delay subroutine, waits 2 microseconds
+0024   1283 1303      00063     BANKSEL INTCON ;move to bank 0
+0026   110B           00064     bcf INTCON,T0IF ;clear timer 1 interrupt flag
+0027   30FF           00065     MOVLW d'255' ;set timer0 initial value
+0028   0081           00066     MOVWF TMR0
+0029   2???           00067     call TimingLoop 
+002A   0008           00068     return 
+                      00069     
+002B                  00070 TimingLoop
+002B   1D0B           00071     BTFSS INTCON,T0IF ;wait until timer overflows (2 microseconds)
+002C   2???           00072     goto TimingLoop
+002D   0008           00073     return
+                      00074     
 Warning[205]: Found directive in column 1. (END)
-30E4                  00054 END
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  3
+30E4                  00075 END
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  3
 
 
 SYMBOL TABLE
@@ -137,7 +157,7 @@ CCP1X                             00000005
 CCP1Y                             00000004
 CCP2CON                           0000001D
 CCP2IE                            00000000
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  4
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  4
 
 
 SYMBOL TABLE
@@ -196,7 +216,7 @@ EECON1                            0000018C
 EECON2                            0000018D
 EEDATA                            0000010C
 EEDATH                            0000010E
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  5
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  5
 
 
 SYMBOL TABLE
@@ -255,7 +275,7 @@ IRCF2                             00000006
 IRP                               00000007
 IRVST                             00000005
 LCDA                              00000005
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  6
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  6
 
 
 SYMBOL TABLE
@@ -283,7 +303,7 @@ LCDSE1                            0000011D
 LCDSE2                            0000011E
 LMUX0                             00000000
 LMUX1                             00000001
-LOOP                              00000014
+LOOP                              0000001C
 LP0                               00000000
 LP1                               00000001
 LP2                               00000002
@@ -314,7 +334,7 @@ OERR                              00000001
 OPTION_REG                        00000081
 OSCCON                            0000008F
 OSCTUNE                           00000090
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  7
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  7
 
 
 SYMBOL TABLE
@@ -338,7 +358,7 @@ PORTC                             00000007
 PORTD                             00000008
 PORTE                             00000009
 PR2                               00000092
-PROCESS_DATA                      0000001A
+PROCESS_DATA                      00000022
 PS0                               00000000
 PS1                               00000001
 PS2                               00000002
@@ -373,7 +393,7 @@ RC7                               00000007
 RC8_9                             00000006
 RC9                               00000006
 RCD8                              00000000
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  8
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  8
 
 
 SYMBOL TABLE
@@ -432,7 +452,7 @@ S15C0                             00000007
 S15C1                             00000007
 S15C2                             00000007
 S15C3                             00000007
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE  9
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE  9
 
 
 SYMBOL TABLE
@@ -491,7 +511,7 @@ S5C1                              00000005
 S5C2                              00000005
 S5C3                              00000005
 S6C0                              00000006
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 10
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 10
 
 
 SYMBOL TABLE
@@ -550,7 +570,7 @@ SEG10COM1                         00000002
 SEG10COM2                         00000002
 SEG10COM3                         00000002
 SEG11                             00000003
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 11
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 11
 
 
 SYMBOL TABLE
@@ -609,7 +629,7 @@ SEG20                             00000004
 SEG20COM0                         00000004
 SEG20COM1                         00000004
 SEG20COM2                         00000004
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 12
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 12
 
 
 SYMBOL TABLE
@@ -668,7 +688,7 @@ SEG8COM3                          00000000
 SEG9                              00000001
 SEG9COM0                          00000001
 SEG9COM1                          00000001
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 13
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 13
 
 
 SYMBOL TABLE
@@ -722,12 +742,12 @@ STATUS                            00000003
 SWDTE                             00000000
 SWDTEN                            00000000
 SYNC                              00000004
-SampleTime                        0000001C
+SampleTime                        00000024
 T0CS                              00000005
 T0IE                              00000005
 T0IF                              00000002
 T0SE                              00000004
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 14
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 14
 
 
 SYMBOL TABLE
@@ -745,7 +765,7 @@ T1SYNC                            00000002
 T2CKPS0                           00000000
 T2CKPS1                           00000001
 T2CON                             00000012
-TERMINATE                         00000019
+TERMINATE                         00000021
 TMR0                              00000001
 TMR0IE                            00000005
 TMR0IF                            00000002
@@ -786,7 +806,7 @@ TRISB7                            00000007
 TRISC                             00000087
 TRISC0                            00000000
 TRISC1                            00000001
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 15
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 15
 
 
 SYMBOL TABLE
@@ -827,6 +847,7 @@ TXIE                              00000004
 TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
+TimingLoop                        0000002B
 UA                                00000001
 VCFG0                             00000005
 VCFG1                             00000006
@@ -844,13 +865,13 @@ WCOL                              00000007
 WDTCON                            00000105
 WDTPS0                            00000001
 WDTPS1                            00000002
-WDTPS2                            00000003
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 16
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 16
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+WDTPS2                            00000003
 WDTPS3                            00000004
 WERR                              00000005
 WFT                               00000007
@@ -903,13 +924,13 @@ _FOSC_EC                          00003FFB
 _FOSC_EXTRCCLK                    00003FFF
 _FOSC_EXTRCIO                     00003FFE
 _FOSC_HS                          00003FFA
-_FOSC_INTOSCCLK                   00003FFD
-MPASM 5.76                         LAB_3.ASM   3-6-2018  18:08:30         PAGE 17
+MPASM 5.76                         LAB_3.ASM   3-7-2018  19:29:35         PAGE 17
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_FOSC_INTOSCCLK                   00003FFD
 _FOSC_INTOSCIO                    00003FFC
 _FOSC_LP                          00003FF8
 _FOSC_XT                          00003FF9
@@ -937,7 +958,7 @@ _XT_OSC                           00003FF9
 __16F917                          00000001
 
 Errors   :     0
-Warnings :     3 reported,     0 suppressed
-Messages :     0 reported,     3 suppressed
+Warnings :     2 reported,     0 suppressed
+Messages :     0 reported,     5 suppressed
 
 

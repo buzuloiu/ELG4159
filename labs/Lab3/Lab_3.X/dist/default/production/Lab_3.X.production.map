@@ -1,12 +1,12 @@
 MPLINK 5.08, LINKER
-Linker Map File - Created Tue Mar 06 18:08:32 2018
+Linker Map File - Created Wed Mar 07 19:29:37 2018
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
                    .org_0       code   0x000000    program   0x000002
                    .cinit    romdata   0x000001    program   0x000004
-                   .org_1       code   0x000005    program   0x000032
+                   .org_1       code   0x000005    program   0x000052
 .config_2007_BUILD/DEFAULT/PRODUCTION/LAB_3.O       code   0x002007    program   0x000002
 
 
@@ -15,20 +15,21 @@ Linker Map File - Created Tue Mar 06 18:08:32 2018
                                Start         End      
                            ---------   ---------      
                             0x000000    0x000002      
-                            0x000005    0x00001d      
+                            0x000005    0x00002d      
                             0x002007    0x002007      
-            29 out of 8454 program addresses used, program memory utilization is 0%
+            45 out of 8454 program addresses used, program memory utilization is 0%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                     LOOP   0x000014    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-             PROCESS_DATA   0x00001a    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+                     LOOP   0x00001c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+             PROCESS_DATA   0x000022    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
                     START   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-               SampleTime   0x00001c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-                TERMINATE   0x000019    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+               SampleTime   0x000024    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+                TERMINATE   0x000021    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+               TimingLoop   0x00002b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
 
 
 
@@ -36,9 +37,10 @@ Linker Map File - Created Tue Mar 06 18:08:32 2018
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
                     START   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-                     LOOP   0x000014    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-                TERMINATE   0x000019    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-             PROCESS_DATA   0x00001a    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
-               SampleTime   0x00001c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+                     LOOP   0x00001c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+                TERMINATE   0x000021    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+             PROCESS_DATA   0x000022    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+               SampleTime   0x000024    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
+               TimingLoop   0x00002b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab3\Lab_3.X\lab_3.asm
 
 
