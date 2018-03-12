@@ -1,4 +1,4 @@
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  1
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ Warning[205]: Found directive in column 1. (errorlevel)
 0016   1091           00038     BCF ANSEL,1 ;Set RA1 to digital temporarily
                       00039 
 0017   1683 1303      00040     BANKSEL  OSCCON
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  2
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0040   149F           00091     BSF ADCON0,GO ;Start conversion again
                       00092 
                       00093     
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  3
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -148,7 +148,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00117 
 Warning[205]: Found directive in column 1. (END)
 30E4                  00118 END
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  4
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  4
 
 
 SYMBOL TABLE
@@ -207,7 +207,7 @@ CCP1X                             00000005
 CCP1Y                             00000004
 CCP2CON                           0000001D
 CCP2IE                            00000000
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  5
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  5
 
 
 SYMBOL TABLE
@@ -266,7 +266,7 @@ EEADRL7                           00000007
 EECON1                            0000018C
 EECON2                            0000018D
 EEDATA                            0000010C
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  6
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  6
 
 
 SYMBOL TABLE
@@ -325,7 +325,7 @@ IRCF1                             00000005
 IRCF2                             00000006
 IRP                               00000007
 IRVST                             00000005
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  7
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  7
 
 
 SYMBOL TABLE
@@ -384,7 +384,7 @@ NOT_WRITE                         00000002
 OERR                              00000001
 OPTION_REG                        00000081
 OSCCON                            0000008F
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  8
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  8
 
 
 SYMBOL TABLE
@@ -443,7 +443,7 @@ RC6                               00000006
 RC7                               00000007
 RC8_9                             00000006
 RC9                               00000006
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE  9
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE  9
 
 
 SYMBOL TABLE
@@ -502,7 +502,7 @@ S14C3                             00000006
 S15C0                             00000007
 S15C1                             00000007
 S15C2                             00000007
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 10
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 10
 
 
 SYMBOL TABLE
@@ -561,7 +561,7 @@ S5C0                              00000005
 S5C1                              00000005
 S5C2                              00000005
 S5C3                              00000005
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 11
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 11
 
 
 SYMBOL TABLE
@@ -620,7 +620,7 @@ SEG10COM0                         00000002
 SEG10COM1                         00000002
 SEG10COM2                         00000002
 SEG10COM3                         00000002
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 12
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 12
 
 
 SYMBOL TABLE
@@ -679,7 +679,7 @@ SEG2                              00000002
 SEG20                             00000004
 SEG20COM0                         00000004
 SEG20COM1                         00000004
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 13
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 13
 
 
 SYMBOL TABLE
@@ -738,7 +738,7 @@ SEG8COM2                          00000000
 SEG8COM3                          00000000
 SEG9                              00000001
 SEG9COM0                          00000001
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 14
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 14
 
 
 SYMBOL TABLE
@@ -797,7 +797,7 @@ SampleTime                        00000044
 T0CS                              00000005
 T0IE                              00000005
 T0IF                              00000002
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 15
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 15
 
 
 SYMBOL TABLE
@@ -856,7 +856,7 @@ TRISB5                            00000005
 TRISB6                            00000006
 TRISB7                            00000007
 TRISC                             00000087
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 16
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 16
 
 
 SYMBOL TABLE
@@ -915,7 +915,7 @@ W                                 00000000
 WA                                00000004
 WCOL                              00000007
 WDTCON                            00000105
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 17
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 17
 
 
 SYMBOL TABLE
@@ -974,7 +974,7 @@ _FCMEN_OFF                        000037FF
 _FCMEN_ON                         00003FFF
 _FOSC_EC                          00003FFB
 _FOSC_EXTRCCLK                    00003FFF
-MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  16:32:14         PAGE 18
+MPASM 5.76                    POT_SWITCH.ASM   3-12-2018  17:26:06         PAGE 18
 
 
 SYMBOL TABLE
