@@ -1,5 +1,8 @@
 ; ELG4159
-; Lab 2 (Problem 10 Tutorial 1)
+;group 16
+;Paul Buzuloiu
+;Manit Ginoya
+;Nikhil Peri
 #include <P16F917.inc>
 
 	

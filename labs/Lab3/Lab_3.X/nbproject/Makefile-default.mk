@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lab_3.asm
+SOURCEFILES_QUOTED_IF_SPACED=pot_switch.asm
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lab_3.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lab_3.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/pot_switch.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/pot_switch.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lab_3.o
+OBJECTFILES=${OBJECTDIR}/pot_switch.o
 
 # Source Files
-SOURCEFILES=lab_3.asm
+SOURCEFILES=pot_switch.asm
 
 
 CFLAGS=
@@ -90,26 +90,26 @@ endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/Lab_3.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
 MP_PROCESSOR_OPTION=16f917
-MP_LINKER_DEBUG_OPTION= 
+MP_LINKER_DEBUG_OPTION=-r=ROM@0x1F00:0x1FFE -r=RAM@SHARE:0x70:0x70 -r=RAM@SHARE:0xF0:0xF0 -r=RAM@GPR:0x165:0x16F -r=RAM@SHARE:0x170:0x170 -r=RAM@SHARE:0x1F0:0x1F0
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/lab_3.o: lab_3.asm  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/pot_switch.o: pot_switch.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/lab_3.o.d 
-	@${RM} ${OBJECTDIR}/lab_3.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/lab_3.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/lab_3.lst\" -e\"${OBJECTDIR}/lab_3.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/lab_3.o\" \"lab_3.asm\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/lab_3.o"
-	@${FIXDEPS} "${OBJECTDIR}/lab_3.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	@${RM} ${OBJECTDIR}/pot_switch.o.d 
+	@${RM} ${OBJECTDIR}/pot_switch.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pot_switch.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PICKIT2=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/pot_switch.lst\" -e\"${OBJECTDIR}/pot_switch.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/pot_switch.o\" \"pot_switch.asm\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/pot_switch.o"
+	@${FIXDEPS} "${OBJECTDIR}/pot_switch.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 else
-${OBJECTDIR}/lab_3.o: lab_3.asm  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/pot_switch.o: pot_switch.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/lab_3.o.d 
-	@${RM} ${OBJECTDIR}/lab_3.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/lab_3.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/lab_3.lst\" -e\"${OBJECTDIR}/lab_3.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/lab_3.o\" \"lab_3.asm\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/lab_3.o"
-	@${FIXDEPS} "${OBJECTDIR}/lab_3.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	@${RM} ${OBJECTDIR}/pot_switch.o.d 
+	@${RM} ${OBJECTDIR}/pot_switch.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pot_switch.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/pot_switch.lst\" -e\"${OBJECTDIR}/pot_switch.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/pot_switch.o\" \"pot_switch.asm\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/pot_switch.o"
+	@${FIXDEPS} "${OBJECTDIR}/pot_switch.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 endif
 
@@ -118,7 +118,7 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/Lab_3.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION)  -w -x -u_DEBUG -z__ICD2RAM=1 -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"   -z__MPLAB_BUILD=1  -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_SIMULATOR=1 $(MP_LINKER_DEBUG_OPTION) -odist/${CND_CONF}/${IMAGE_TYPE}/Lab_3.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
+	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION)  -w -x -u_DEBUG -z__ICD2RAM=1 -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"   -z__MPLAB_BUILD=1  -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_PICKIT2=1 $(MP_LINKER_DEBUG_OPTION) -odist/${CND_CONF}/${IMAGE_TYPE}/Lab_3.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/Lab_3.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
