@@ -1,4 +1,4 @@
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  1
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -12,8 +12,22 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00006     
                       00007 ;use AN0 because 16 mod 8 is 0
                       00008 ;CCP2 because 16 is even
-                      00009 
-                      00010 #include<p16f917.inc>
+                      00009     
+                      00010   
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   30E4           00011 __CONFIG _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_ON & _FCMEN
+                            _OFF & _IESO_OFF
+Warning[205]: Found directive in column 1. (errorlevel)
+                      00012 errorlevel -302 ; supress "register not in bank0, check page bits" message
+                      00013 
+  00000020            00014 temp_msb_A = 0x20;some GPR
+  00000021            00015 temp_lsb_A = 0x21;the next GPR
+  00000022            00016 temp_msb_B = 0x22;some GPR
+  00000023            00017 temp_lsb_B = 0x23;the next GPR
+                      00018 
+  00000024            00019 seven_counter = 0x24;the next next GPR
+                      00020 
+                      00021 #include<p16f917.inc>
                       00001         LIST
                       00002 
                       00003 ;==========================================================================
@@ -24,51 +38,158 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00008 ;==========================================================================
                       00009 
                       01253         LIST
-                      00011     org 0x00
-0000   2???           00012     goto START 
-                      00013     org 0x05
-                      00014     
-0005                  00015 START
-0005   1683           00016     bsf STATUS,RP0;bank1
-0006   1303           00017     bcf STATUS,RP1
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0007   1508           00018     bsf TRISD,2 ;configure RD2 as temporary input
-                      00019     
-0008   30FF           00020     movlw d'255'
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0009   0092           00021     movwf PR2
-                      00022     
-000A   3070           00023     movlw b'01110000'
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000B   008F           00024     movwf OSCCON
+                      00022     org 0x00
+0000   2???           00023     goto START 
+                      00024     org 0x05
                       00025     
-000C   1283           00026     bcf STATUS,RP0 ;bank 0
-                      00027     
-000D   303C           00028     movlw b'00111100' ;<5:4> as computed in part 1, <3:0> = 11xx for PWM
-000E   009D           00029     movwf CCP2CON
-                      00030     
-000F   3050           00031     movlw b'01010000'
-0010   081B           00032     movfw CCPR2L ;as computed in part 1
-                      00033     
-0011   3004           00034     movlw b'00000100' ;postscaler=0 prescaler=1 enable=yes
-0012   0092           00035     movwf T2CON
-                      00036     
-0013   1683           00037     bsf STATUS,RP0 ;configure RD2 back to output
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0014   1108           00038     BCF TRISD,2
-                      00039       
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  2
+0005                  00026 START
+                      00027     ;configure PWM
+0005   1683           00028     bsf STATUS,RP0;bank1
+0006   1303           00029     bcf STATUS,RP1
+0007   1508           00030     bsf TRISD,2 ;configure RD2 as temporary input
+0008   30FF           00031     movlw d'255'
+0009   0092           00032     movwf PR2
+000A   3070           00033     movlw b'01110000'
+000B   008F           00034     movwf OSCCON
+000C   1283           00035     bcf STATUS,RP0 ;bank 0
+000D   3004           00036     movlw b'00000100' ;postscaler=0 prescaler=1 enable=yes
+000E   0092           00037     movwf T2CON
+000F   1683           00038     bsf STATUS,RP0 ;configure RD2 back to output
+0010   1108           00039     BCF TRISD,2
+                      00040     
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0015                  00040 TERMINATE
-0015   2???           00041     goto TERMINATE
-                      00042     
+                      00041     ;configure ADC
+0011   1683 1303      00042     BANKSEL ADCON1
+0013   3050           00043     MOVLW b'01010000' ;set ADC Prescaler to 16
+0014   009F           00044     MOVWF ADCON1
+0015   1683 1303      00045     BANKSEL TRISA
+0017   1405           00046     BSF TRISA,0 ;Set RA0 to input
+0018   1683 1303      00047     BANKSEL ANSEL 
+001A   1411           00048     BSF ANSEL,0 ;Set RA0 to analog
+001B   1683 1303      00049     BANKSEL OPTION_REG
+001D   3087           00050     MOVLW b'10000111' ;set timer0 prescaler to 256
+001E   0081           00051     MOVWF OPTION_REG
+001F   1283 1303      00052     BANKSEL ADCON0
+0021   3081           00053     MOVLW b'10000001' ;Right justify, enable ADC
+0022   009F           00054     MOVWF ADCON0
+0023   2???           00055     call SampleTime
+0024   2???           00056     goto MAIN
+                      00057     
+0025                  00058 MAIN
+0025   189F           00059     BTFSC ADCON0,GO ; Wait until conversion finishes
+0026   2???           00060     GOTO MAIN
+0027   2???           00061     call move_adc_to_temp
+0028   2???           00062     call right_shift_10_bit;divide by 8
+0029   2???           00063     call right_shift_10_bit
+002A   2???           00064     call right_shift_10_bit
+002B   2???           00065     call multiply_10_bit_by_7_1
+002C   1683           00066     bsf STATUS,RP0;bank1
+002D   1303           00067     bcf STATUS,RP1
+002E   1508           00068     bsf TRISD,2 ;configure RD2 as temporary input
+002F   2???           00069     call move_temp_to_analog
+0030   1283 1303      00070     banksel STATUS
+0032   1683           00071     bsf STATUS,RP0 ;configure RD2 back to output
+0033   1108           00072     BCF TRISD,2
+0034   149F           00073     BSF ADCON0,GO ;Start conversion again
+0035   2???           00074     goto MAIN
+                      00075       
+0036                  00076 TERMINATE
+0036   2???           00077     goto TERMINATE
+                      00078 
+                      00079     
+0037                  00080 move_adc_to_temp
+0037   1283 1303      00081     BANKSEL ADRESH ;get MSBs and move them to temp
+0039   081E           00082     MOVF ADRESH,0
+003A   00A0           00083     MOVWF temp_msb_A
+003B   1683 1303      00084     BANKSEL ADRESL ;get LSBs and move them to temp
+003D   081E           00085     MOVF ADRESL,0
+003E   1283           00086     BCF STATUS,RP0
+003F   00A1           00087     MOVWF temp_lsb_A
+0040   0008           00088     return
+                      00089     
+0041                  00090 move_temp_to_analog
+0041   1303           00091     BCF STATUS,RP1 ;bank 0 for the temp registers
+0042   1283           00092     BCF STATUS,RP0
+0043   0DA2           00093     RLF temp_msb_B,1
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0044   0D22           00094     RLF temp_msb_B,0
+                      00095     ;move temp to work reg
+0045   1283 1303      00096     BANKSEL CCP2CON
+0047   009D           00097     movwf CCP2CON ;<5:4> as computed in part 1, <3:0> = 11xx for PWM
+0048   159D           00098     BSF CCP2CON,3 
+0049   151D           00099     BSF CCP2CON,2
+004A   109D           00100     BCF CCP2CON,1
+004B   101D           00101     BCF CCP2CON,0
+004C   1283           00102     BCF STATUS,RP0;get LSBs from temp
+004D   0823           00103     MOVF temp_lsb_B,0
+004E   1283 1303      00104     BANKSEL CCPR2L
+0050   009B           00105     movwf CCPR2L ;as computed in part 1
+0051   0008           00106     return
+                      00107     
+0052                  00108 right_shift_10_bit
+0052   1283           00109     BCF STATUS,RP0
+0053   1303           00110     BCF STATUS,RP1
+0054   0C20           00111     RRF temp_msb_A,0 ;if a 1 is carried out, it will automatically be carried into temp_lsb
+0055   3020           00112     MOVLW temp_msb_A
+0056   3022           00113     MOVLW temp_msb_B
+0057   0C21           00114     RRF temp_lsb_A,0
+0058   3021           00115     MOVLW temp_lsb_A
+0059   3023           00116     MOVLW temp_lsb_B
+005A   0008           00117     return
+                      00118     
+005B                  00119 multiply_10_bit_by_7_1
+005B   1283           00120     BCF STATUS,RP0
+005C   1303           00121     BCF STATUS,RP1
+005D   3007           00122     MOVLW d'7'
+Message[305]: Using default destination of 1 (file).
+005E   08A4           00123     MOVF seven_counter
+005F   2???           00124     call multiply_10_bit_by_7_2
+0060   0008           00125     return
+                      00126     
+0061                  00127 multiply_10_bit_by_7_2
+0061   3021           00128     MOVLW temp_lsb_A
+0062   07A3           00129     ADDWF temp_lsb_B,1
+                      00130     ;add work reg to number
+0063   1803           00131     BTFSC STATUS,C ;check if LSBs had a carry
+0064   0AA2           00132     INCF temp_msb_B,1
+0065   3020           00133     MOVLW temp_msb_A
+0066   07A2           00134     ADDWF temp_msb_B,1
+0067   0BA4           00135     DECFSZ seven_counter,1
+0068   2???           00136     goto multiply_10_bit_by_7_2
+0069   0008           00137     return
+                      00138     
+006A                  00139 SampleTime ;acquisition delay subroutine, waits 2 microseconds
+006A   1283 1303      00140     BANKSEL INTCON ;move to bank 0
+006C   110B           00141     BCF INTCON,T0IF ;clear timer 0 interrupt flag
+006D   30FE           00142     MOVLW d'254' ;set timer0 initial value for tAD
+006E   0081           00143     MOVWF TMR0
+006F   2???           00144     call TimingLoop
+0070   0008           00145     return
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00146     
+0071                  00147 TimingLoop
+0071   1D0B           00148     BTFSS INTCON,T0IF ;wait until timer overflows (2 microseconds)
+0072   2???           00149     goto TimingLoop
+0073   0008           00150     return
+                      00151     
 Warning[205]: Found directive in column 1. (END)
-                      00043 END
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  3
+30E4                  00152 END
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  5
 
 
 SYMBOL TABLE
@@ -127,7 +248,7 @@ CCP1X                             00000005
 CCP1Y                             00000004
 CCP2CON                           0000001D
 CCP2IE                            00000000
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  4
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  6
 
 
 SYMBOL TABLE
@@ -186,7 +307,7 @@ EECON1                            0000018C
 EECON2                            0000018D
 EEDATA                            0000010C
 EEDATH                            0000010E
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  5
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  7
 
 
 SYMBOL TABLE
@@ -245,7 +366,7 @@ IRCF2                             00000006
 IRP                               00000007
 IRVST                             00000005
 LCDA                              00000005
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  6
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  8
 
 
 SYMBOL TABLE
@@ -285,6 +406,7 @@ LVDIF                             00000002
 LVDL0                             00000000
 LVDL1                             00000001
 LVDL2                             00000002
+MAIN                              00000025
 NOT_A                             00000005
 NOT_ADDRESS                       00000005
 NOT_BO                            00000000
@@ -303,13 +425,13 @@ OERR                              00000001
 OPTION_REG                        00000081
 OSCCON                            0000008F
 OSCTUNE                           00000090
-OSFIE                             00000007
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  7
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE  9
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+OSFIE                             00000007
 OSFIF                             00000007
 OSTS                              00000003
 P                                 00000004
@@ -362,13 +484,13 @@ RC8_9                             00000006
 RC9                               00000006
 RCD8                              00000000
 RCIE                              00000005
-RCIF                              00000005
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  8
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 10
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+RCIF                              00000005
 RCREG                             0000001A
 RCSTA                             00000018
 RD                                00000000
@@ -421,13 +543,13 @@ S15C1                             00000007
 S15C2                             00000007
 S15C3                             00000007
 S16C0                             00000000
-S16C1                             00000000
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE  9
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 11
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+S16C1                             00000000
 S16C2                             00000000
 S16C3                             00000000
 S17C0                             00000001
@@ -480,13 +602,13 @@ S5C2                              00000005
 S5C3                              00000005
 S6C0                              00000006
 S6C1                              00000006
-S6C2                              00000006
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 10
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 12
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+S6C2                              00000006
 S6C3                              00000006
 S7C0                              00000007
 S7C1                              00000007
@@ -539,13 +661,13 @@ SEG10COM2                         00000002
 SEG10COM3                         00000002
 SEG11                             00000003
 SEG11COM0                         00000003
-SEG11COM1                         00000003
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 11
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 13
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+SEG11COM1                         00000003
 SEG11COM2                         00000003
 SEG11COM3                         00000003
 SEG12                             00000004
@@ -598,13 +720,13 @@ SEG20COM0                         00000004
 SEG20COM1                         00000004
 SEG20COM2                         00000004
 SEG20COM3                         00000004
-SEG21                             00000005
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 12
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 14
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+SEG21                             00000005
 SEG21COM0                         00000005
 SEG21COM1                         00000005
 SEG21COM2                         00000005
@@ -657,13 +779,13 @@ SEG9                              00000001
 SEG9COM0                          00000001
 SEG9COM1                          00000001
 SEG9COM2                          00000001
-SEG9COM3                          00000001
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 13
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 15
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+SEG9COM3                          00000001
 SEGEN0                            00000000
 SEGEN1                            00000001
 SEGEN10                           00000002
@@ -710,19 +832,20 @@ STATUS                            00000003
 SWDTE                             00000000
 SWDTEN                            00000000
 SYNC                              00000004
+SampleTime                        0000006A
 T0CS                              00000005
 T0IE                              00000005
 T0IF                              00000002
 T0SE                              00000004
 T1CKPS0                           00000004
-T1CKPS1                           00000005
-T1CON                             00000010
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 14
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 16
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+T1CKPS1                           00000005
+T1CON                             00000010
 T1GE                              00000006
 T1GINV                            00000007
 T1GSS                             00000001
@@ -732,7 +855,7 @@ T1SYNC                            00000002
 T2CKPS0                           00000000
 T2CKPS1                           00000001
 T2CON                             00000012
-TERMINATE                         00000015
+TERMINATE                         00000036
 TMR0                              00000001
 TMR0IE                            00000005
 TMR0IF                            00000002
@@ -774,14 +897,14 @@ TRISC                             00000087
 TRISC0                            00000000
 TRISC1                            00000001
 TRISC2                            00000002
-TRISC3                            00000003
-TRISC4                            00000004
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 15
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 17
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+TRISC3                            00000003
+TRISC4                            00000004
 TRISC5                            00000005
 TRISC6                            00000006
 TRISC7                            00000007
@@ -814,6 +937,7 @@ TXIE                              00000004
 TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
+TimingLoop                        00000071
 UA                                00000001
 VCFG0                             00000005
 VCFG1                             00000006
@@ -832,15 +956,15 @@ WDTCON                            00000105
 WDTPS0                            00000001
 WDTPS1                            00000002
 WDTPS2                            00000003
-WDTPS3                            00000004
-WERR                              00000005
-WFT                               00000007
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 16
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 18
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+WDTPS3                            00000004
+WERR                              00000005
+WFT                               00000007
 WPU                               00000095
 WPU0                              00000000
 WPU1                              00000001
@@ -891,15 +1015,15 @@ _FOSC_EXTRCCLK                    00003FFF
 _FOSC_EXTRCIO                     00003FFE
 _FOSC_HS                          00003FFA
 _FOSC_INTOSCCLK                   00003FFD
-_FOSC_INTOSCIO                    00003FFC
-_FOSC_LP                          00003FF8
-_FOSC_XT                          00003FF9
-MPASM 5.76                           PWM.ASM   3-20-2018  14:59:09         PAGE 17
+MPASM 5.76                          LAB4.ASM   3-26-2018  2:26:27         PAGE 19
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_FOSC_INTOSCIO                    00003FFC
+_FOSC_LP                          00003FF8
+_FOSC_XT                          00003FF9
 _HS_OSC                           00003FFA
 _IDLOC0                           00002000
 _IDLOC1                           00002001
@@ -922,9 +1046,19 @@ _WDT_OFF                          00003FF7
 _WDT_ON                           00003FFF
 _XT_OSC                           00003FF9
 __16F917                          00000001
+move_adc_to_temp                  00000037
+move_temp_to_analog               00000041
+multiply_10_bit_by_7_1            0000005B
+multiply_10_bit_by_7_2            00000061
+right_shift_10_bit                00000052
+seven_counter                     00000024
+temp_lsb_A                        00000021
+temp_lsb_B                        00000023
+temp_msb_A                        00000020
+temp_msb_B                        00000022
 
 Errors   :     0
-Warnings :     1 reported,     0 suppressed
-Messages :     4 reported,     0 suppressed
+Warnings :     3 reported,     0 suppressed
+Messages :     1 reported,    11 suppressed
 
 

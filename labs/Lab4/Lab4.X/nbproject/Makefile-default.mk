@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=pwm.asm
+SOURCEFILES_QUOTED_IF_SPACED=lab4.asm
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/pwm.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/pwm.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lab4.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lab4.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/pwm.o
+OBJECTFILES=${OBJECTDIR}/lab4.o
 
 # Source Files
-SOURCEFILES=pwm.asm
+SOURCEFILES=lab4.asm
 
 
 CFLAGS=
@@ -94,22 +94,22 @@ MP_LINKER_DEBUG_OPTION=
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/pwm.o: pwm.asm  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/lab4.o: lab4.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/pwm.o.d 
-	@${RM} ${OBJECTDIR}/pwm.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/pwm.lst\" -e\"${OBJECTDIR}/pwm.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/pwm.o\" \"pwm.asm\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/pwm.o"
-	@${FIXDEPS} "${OBJECTDIR}/pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	@${RM} ${OBJECTDIR}/lab4.o.d 
+	@${RM} ${OBJECTDIR}/lab4.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/lab4.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/lab4.lst\" -e\"${OBJECTDIR}/lab4.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/lab4.o\" \"lab4.asm\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/lab4.o"
+	@${FIXDEPS} "${OBJECTDIR}/lab4.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 else
-${OBJECTDIR}/pwm.o: pwm.asm  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/lab4.o: lab4.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/pwm.o.d 
-	@${RM} ${OBJECTDIR}/pwm.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/pwm.lst\" -e\"${OBJECTDIR}/pwm.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/pwm.o\" \"pwm.asm\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/pwm.o"
-	@${FIXDEPS} "${OBJECTDIR}/pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+	@${RM} ${OBJECTDIR}/lab4.o.d 
+	@${RM} ${OBJECTDIR}/lab4.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/lab4.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/lab4.lst\" -e\"${OBJECTDIR}/lab4.err\" $(ASM_OPTIONS)    -o\"${OBJECTDIR}/lab4.o\" \"lab4.asm\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/lab4.o"
+	@${FIXDEPS} "${OBJECTDIR}/lab4.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 endif
 
