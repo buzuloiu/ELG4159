@@ -50,7 +50,7 @@ START
     MOVLW b'10000111' ;set timer0 prescaler to 256
     MOVWF OPTION_REG
     BANKSEL ADCON0
-    MOVLW b'10000001' ;Right justify, enable ADC
+    MOVLW b'00000001' ;Left justify, enable ADC
     MOVWF ADCON0
     call SampleTime
     goto MAIN
