@@ -3,11 +3,11 @@
 ;Paul Buzuloiu
 ;Manit Ginoya
 ;Nikhil Peri
-    
+
 ;use AN0 because 16 mod 8 is 0
 ;CCP2 because 16 is even
-    
-  
+
+
 __CONFIG _CP_OFF & _CPD_OFF & _BOD_OFF & _PWRTE_ON & _WDT_OFF & _INTRC_OSC_NOCLKOUT & _MCLRE_ON & _FCMEN_OFF & _IESO_OFF
 errorlevel -302 ; supress "register not in bank0, check page bits" message
 
@@ -22,7 +22,7 @@ seven_counter = 0x24;the next next GPR
     org 0x00
     goto START 
     org 0x05
-    
+
 START
     ;configure PWM
     bsf STATUS,RP0;bank1
@@ -38,7 +38,7 @@ START
     movwf T2CON
     bsf STATUS,RP0 ;configure RD2 back to output
     BCF TRISD,2
-    
+
     ;configure ADC
     BANKSEL ADCON1
     MOVLW b'01010000' ;set ADC Prescaler to 16
@@ -53,10 +53,11 @@ START
     BANKSEL ADCON0
     MOVLW b'00000001' ;Left justify, enable ADC
     MOVWF ADCON0
-    call SampleTime
+    goto SampleTime
+    END_OF_START
     BSF ADCON0,GO
     goto MAIN
-    
+
 MAIN
     BTFSC ADCON0,GO ; Wait until conversion finishes
     GOTO MAIN
@@ -67,7 +68,8 @@ MAIN
     MOVLW b'00011111'
     ANDWF temp_msb_A,1
     ANDWF temp_msb_B,1
-    call multiply_10_bit_by_7
+    goto multiply_10_bit_by_7
+    START_OF_END
     BANKSEL TRISD
     bsf TRISD,2 ;configure RD2 as temporary input
     call move_temp_to_analog
@@ -77,10 +79,10 @@ MAIN
     BANKSEL ADCON0
     BSF ADCON0,GO ;Start conversion again
     goto MAIN
-      
+
 TERMINATE
     goto TERMINATE
-    
+
 move_adc_to_temp
     BANKSEL ADRESH ;get MSBs and move them to temp
     MOVF ADRESH,0
@@ -92,7 +94,7 @@ move_adc_to_temp
     MOVWF temp_lsb_A
     MOVWF temp_lsb_B
     return
-    
+
 move_temp_to_analog
     BCF STATUS,RP1 ;bank 0 for the temp registers
     BCF STATUS,RP0
@@ -111,26 +113,28 @@ move_temp_to_analog
     BANKSEL CCPR2L
     movwf CCPR2L ;as computed in part 1
     return
-    
+
 right_shift_10_bit
     BCF STATUS,RP0
     BCF STATUS,RP1
+    BCF STATUS,C
+
     RRF temp_msb_A,1 ;if a 1 is carried out, it will automatically be carried into temp_lsb
+    RRF temp_lsb_A,1
+    
     MOVF temp_msb_A,0
     MOVWF temp_msb_B
-    RRF temp_lsb_A,1
     MOVF temp_lsb_A,0
     MOVWF temp_lsb_B
     return
-    
+
 multiply_10_bit_by_7
     BCF STATUS,RP0 ;bank 0 
     BCF STATUS,RP1
     MOVLW d'7'
     MOVWF seven_counter
-    call multiply_10_bit_by_7_2
-    return
-    
+    goto multiply_10_bit_by_7_2
+
 multiply_10_bit_by_7_2
     MOVF temp_lsb_A,0
     ADDWF temp_lsb_B,1 ;add work reg to number
@@ -139,20 +143,20 @@ multiply_10_bit_by_7_2
     MOVF temp_msb_A,0
     ADDWF temp_msb_B,1
     DECFSZ seven_counter,1
-    call multiply_10_bit_by_7_2
-    return
-    
+    goto multiply_10_bit_by_7_2
+    goto START_OF_END
+
+
 SampleTime ;acquisition delay subroutine, waits 2 microseconds
     BANKSEL INTCON ;move to bank 0
     BCF INTCON,T0IF ;clear timer 0 interrupt flag
-    MOVLW d'254' ;set timer0 initial value for tAD
+    MOVLW d'250' ;set timer0 initial value for tAD
     MOVWF TMR0
-    call TimingLoop
-    return
+    goto TimingLoop
     
+
 TimingLoop
     BTFSS INTCON,T0IF ;wait until timer overflows (2 microseconds)
     goto TimingLoop
-    return
-    
+    goto END_OF_START
 END

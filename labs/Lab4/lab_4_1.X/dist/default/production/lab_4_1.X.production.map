@@ -1,0 +1,58 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Mon Mar 26 19:13:00 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000002
+                   .cinit    romdata   0x000001    program   0x000004
+                   .org_1       code   0x000005    program   0x0000f2
+.config_2007_BUILD/DEFAULT/PRODUCTION/LAB4_1.       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000002      
+                            0x000005    0x00007d      
+                            0x002007    0x002007      
+            125 out of 8454 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+             END_OF_START   0x000026    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+                     MAIN   0x000028    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+                    START   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+             START_OF_END   0x000032    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+               SampleTime   0x000075    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+                TERMINATE   0x00003e    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+               TimingLoop   0x00007b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+         move_adc_to_temp   0x00003f    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+      move_temp_to_analog   0x00004b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+     multiply_10_bit_by_7   0x000067    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+   multiply_10_bit_by_7_2   0x00006c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+       right_shift_10_bit   0x00005d    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    START   0x000005    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+             END_OF_START   0x000026    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+                     MAIN   0x000028    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+             START_OF_END   0x000032    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+                TERMINATE   0x00003e    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+         move_adc_to_temp   0x00003f    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+      move_temp_to_analog   0x00004b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+       right_shift_10_bit   0x00005d    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+     multiply_10_bit_by_7   0x000067    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+   multiply_10_bit_by_7_2   0x00006c    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+               SampleTime   0x000075    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+               TimingLoop   0x00007b    program     static C:\Users\Paul\Documents\School\uni year 4\ELG4159\ELG4159\labs\Lab4\lab_4_1.X\lab4_1.asm
+
+
