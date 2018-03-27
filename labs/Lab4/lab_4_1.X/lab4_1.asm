@@ -73,7 +73,6 @@ MAIN
     BANKSEL TRISD
     bsf TRISD,2 ;configure RD2 as temporary input
     call move_temp_to_analog
-    bsf STATUS,RP0 ;configure RD2 back to output
     BANKSEL TRISD
     BCF TRISD,2
     BANKSEL ADCON0
@@ -100,7 +99,7 @@ move_temp_to_analog
     BCF STATUS,RP0
     RRF temp_lsb_B,1
     RRF temp_lsb_B,1
-    MOVLW temp_lsb_B
+    MOVF temp_lsb_B,0
     ;move temp to work reg
     BANKSEL CCP2CON
     movwf CCP2CON ;<5:4> as computed in part 1, <3:0> = 11xx for PWM
@@ -147,7 +146,7 @@ multiply_10_bit_by_7_2
     goto START_OF_END
 
 
-SampleTime ;acquisition delay subroutine, waits 2 microseconds
+SampleTime ;acquisition delay subroutine
     BANKSEL INTCON ;move to bank 0
     BCF INTCON,T0IF ;clear timer 0 interrupt flag
     MOVLW d'250' ;set timer0 initial value for tAD
